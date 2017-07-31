@@ -4195,6 +4195,7 @@
 		</dna>
 	</archetype>
   
+  
   <!-- Bad Company Archetypes -->
   <archetype name="ZombieAiden" male="true" hair_color="249,130,2" eye_color="101,111,145" skin_color="64,64,64" type="Player">
     <base_mesh_parts>
