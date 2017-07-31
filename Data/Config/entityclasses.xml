@@ -1010,6 +1010,7 @@
     <property name="NightApproachSpeed" value="1.35"/>
     <drop event="Harvest" name="rottingFlesh" tool_category="Butcher" count="0"/>
   </entity_class>
+  
   <entity_class name="animalTemplateTimid">
     <property name="Mesh" value="Animals/Stag/STAG"/>
     <property name="ModelType" value="Standard"/>
@@ -1137,6 +1138,7 @@
     <drop event="Harvest" name="animalHide" tool_category="Butcher" count="7"/>
     <drop event="Harvest" name="animalFat" tool_category="Butcher" count="6"/>
   </entity_class>
+
   <entity_class name="animalTemplateHostile">
     <property name="Mesh" value="Zombies/zombieDogPrefab"/>
     <property name="ModelType" value="Standard"/>
@@ -1529,6 +1531,7 @@
     <drop event="Harvest" name="animalHide" tool_category="Butcher" count="7"/>
     <drop event="Harvest" name="animalFat" tool_category="Butcher" count="6"/>
   </entity_class>
+  
   <entity_class name="supplyPlane">
     <property name="Mesh" value="SupplyPlane/prefabC46"/>
     <property name="ModelType" value="Standard"/>
@@ -1634,6 +1637,7 @@
     <property name="LootListOnDeath" value="47"/>
     <property name="Faction" value="none"/>
   </entity_class>
+  
   <entity_class name="npcSurvivorTemplate">
     <property name="EntityType" value="Player"/>
     <property name="Faction" value="whiteriver"/>
@@ -1745,6 +1749,7 @@
     <property name="AIPackages" value="Human Basic, Human Ranged"/>
     <property name="LootListOnDeath" value="72"/>
   </entity_class>
+
   <entity_class name="npcTraderTemplate">
     <property name="EntityType" value="Player"/>
     <property name="Faction" value="trader"/>
