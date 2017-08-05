@@ -9681,7 +9681,7 @@ Mesh files no longer used:
     <property class="Attributes">
       <property name="FalloffRange" value="50,50"/>
       <property name="Accuracy" value="0.05,0.05"/>
-      <property name="EntityDamage" value="35,35"/>
+      <property name="EntityDamage" value="25,25"/>
       <property name="BlockDamage" value="10,10"/>
     </property>
   </item>
@@ -9863,7 +9863,7 @@ Mesh files no longer used:
     <property class="Attributes">
       <property name="FalloffRange" value="90,90"/>
       <property name="Accuracy" value="0.05,0.05"/>
-      <property name="EntityDamage" value="35,35"/>
+      <property name="EntityDamage" value="25,25"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
   </item>
@@ -9905,7 +9905,7 @@ Mesh files no longer used:
       <property name="DismembermentBonus" value="0.00045,0.00045"/>
       <property name="FalloffRange" value="160,160"/>
       <property name="Accuracy" value="0.03,0.03"/>
-      <property name="EntityDamage" value="45,45"/>
+      <property name="EntityDamage" value="25,25"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
   </item>
@@ -9947,7 +9947,7 @@ Mesh files no longer used:
       <property name="DismembermentBonus" value="0.00050,0.00050"/>
       <property name="FalloffRange" value="160,160"/>
       <property name="Accuracy" value="0.03,0.03"/>
-      <property name="EntityDamage" value="45,45"/>
+      <property name="EntityDamage" value="25,25"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
   </item>
@@ -9996,7 +9996,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="15,15"/>
+      <property name="EntityDamage" value="10,10"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
     <property class="Action1">
@@ -10016,7 +10016,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="35,35"/>
+      <property name="EntityDamage" value="20,20"/>
       <property name="BlockDamage" value="10,10"/>
     </property>
     <property class="Action1">
@@ -10036,7 +10036,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="25,25"/>
+      <property name="EntityDamage" value="15,15"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
     <property class="Action1">
@@ -10056,7 +10056,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="35,35"/>
+      <property name="EntityDamage" value="20,20"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
     <property class="Action1">
@@ -10076,7 +10076,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="60,60"/>
+      <property name="EntityDamage" value="40,40"/>
       <property name="BlockDamage" value="35,35"/>
     </property>
     <property class="Action1">
@@ -10121,7 +10121,7 @@ Mesh files no longer used:
     <property name="Stacknumber" value="500"/>
     <property class="Attributes">
       <property name="GetQualityFromWeapon" value="true"/>
-      <property name="EntityDamage" value="55,55"/>
+      <property name="EntityDamage" value="20,20"/>
       <property name="BlockDamage" value="5,5"/>
     </property>
     <property class="Action1">
