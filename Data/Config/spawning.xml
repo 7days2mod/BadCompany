@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spawning>
-  
+
   <!-- BIOME SPAWNERS -->
   <biome name="city">
     <spawn maxcount="3" respawndelay="1" time="Day" entitygroup="ZombiesTierGroup02"/>
@@ -52,7 +52,7 @@
     <spawn maxcount="1" respawndelay="7" time="Any" entitygroup="EnemyAnimalsSnow" spawnDeadChance="0"/>
     <spawn maxcount="1" respawndelay="7" time="Any" entitygroup="FriendlyAnimalsSnow" spawnDeadChance="0"/>
   </biome>
-  
+
   <!-- ENTITY SPAWNERS -->
   <entityspawner name="Dog_Sm_Territorial">
     <day value="*">
@@ -340,8 +340,20 @@
       <property name="AttackPlayerAtOnce" value="false"/>
     </day>
   </entityspawner>
-  
+
   <!-- ROAMING AND SCOUT -->
+  <entityspawner name="Scouts" dynamic="true" wrapMode="wrap">
+    <day value="*">
+      <property name="ResetToday" value="true"/>
+      <property name="EntityGroupName" value="ZombieScouts"/>
+      <property name="Time" value="Any"/>
+      <property name="DelayBetweenSpawns" value="1"/>
+      <property name="TotalAlive" value="1"/>
+      <property name="TotalPerWave" value="1"/>
+    </day>
+  </entityspawner>
+
+  <!-- DELETE? -->
   <entityspawner name="RoamingHordeSpawnDay" dynamic="true" wrapMode="wrap">
     <day value="1">
       <property name="EntityGroupName" value="ZombiesAll"/>
@@ -696,18 +708,6 @@
       <property name="TotalPerWave" value="3"/>
     </day>
   </entityspawner>
-  <entityspawner name="Scouts" dynamic="true" wrapMode="wrap">
-    <day value="*">
-      <property name="ResetToday" value="true"/>
-      <property name="EntityGroupName" value="ZombieScouts"/>
-      <property name="Time" value="Any"/>
-      <property name="DelayBetweenSpawns" value="1"/>
-      <property name="TotalAlive" value="1"/>
-      <property name="TotalPerWave" value="1"/>
-    </day>
-  </entityspawner>
-
-  <!-- DELETE -->
   <entityspawner name="NightHorde" dynamic="true" wrapMode="clamp">
     <day value="*">
       <property name="ResetToday" value="true"/>

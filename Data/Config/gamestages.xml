@@ -1,273 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-
-Game stage spawning: All game stage spawning starts with a "Spawner" which is a named object referenced in the code
-or other data (like POIs). The spawner itself contains all of the gamestage information for that particular spawner.
-Examples: BloodMoonHorde spawner, or a large POI spawn, or a POI spawn that contains football players.
-
-Each spawner defines a set of game stages. An individual game stage defines the actual spawning and spawning progression
-for that specific stage. The game stage number is an estimate of "difficulty", higher game stages should be harder than
-lower game stages.
-
-<spawner name="BloodMoonHorde">
-	<gamestage stage="1">
-
-		// Starting spawn stage is in this first entry.
-		// It will spawn up to 300 zombies, but only 8 can be alive at any one time due to performance reasons.
-		// Zombies will be spawned from the ZombiesNight spawn group defined in entitygroups.xml
-		// (Optional) The duration of this stage is 1 game hour, after that game hour the next spawn will start OR the spawning will complete
-		// if there are no more spawns.
-		// (Optional) Interval is a delay in seconds between the end of a spawn group and the next one
-		// If we have a use for it this could also trigger a stinger sound.
-
-		<spawn group="ZombiesNight" num="300" maxAlive ="8" duration="1" interval="60"/>
-
-		// After 300 zombies have been killed this defines a kind of "station keeping" mode
-		// where there will be one zombie sent to harass the players until sunrise.
-
-		<spawn group="ZombiesNight" num="9999999" maxAlive="1"/>
-			maxAlive is now per player, not per party
-	</gamestage>
-</spawner>
-
-The code will use the highest stage that is less than or equal to your computed stage.
-There is no cap on gamestage. If you feel like defining a stage="5000" - go nuts.
-
-The gamestage is calculated once, when the "event" occurs.
-When the blood moon rises the game considers nearby players as "a party" and figures out the accumulated gamestage.
-This gamestage will be in effect for the duration of the event.
-If players log in later or drop out, such as during the blood moon event, the gamestage will not change.
-
-- - - - - - -
-
-There is a metric which maps a player or group of players to a game stage number.
-
-
-daysSurvived : This is a running total, kept for every individual player, and low-capped at 0.
-				Every 24 hours GAME time 1 is added. On every death "daysAliveChangeWhenKilled" is subtracted from the total.
-
-gameStage = playerLevel + playerLevel * (daysSurvived  * daysAliveDifficultyBonus + gameDifficultyMultiplier )
-
-So if a player was level 10 and survived 4 days playing on the Nomad Difficulty when the game stage points are calculated the game stage points would be the sum of
-gameStage = (Player Level 10) + ((Player 10) X  (Days Survived 4 X .1 + Nomad Difficulty Multiplier .2))
-The total would be 10 + 10 x .6 or 16 game stage points
-
-Now this mainly shows how weight is applied when calculating the gameStage of a party of players:
-
-		gameStage = 0;
-		weight = startingWeight;
-		foreach (player in partySortedByPlayerLevel) {
-			gameStage += (player.level*(1+(player.daysAliveDifficultyBonus*0.1)+GlobalGameDifficultyBonus)*weight;
-			weight -= diminishingReturns;
-			if (weight <= 0f) {
-				break;
-			}
-		}
-
-- - - - - - -
-
-Which gameStage list of spawn groups is actually picked and "ran" if it calculates a GS of 15?
-
-It rounds down.
-
-At a GS of 15, the <gamestage stage="14"> is used.
-
-At a GS of 14, <gamestage stage="12"> is used.
-
-- - - - - - -
-
-There is a console command: forcegamestage
-	This will force a gamestage for testing.
-	The calculation will not run at all but you jump directly to the spawn set for this stage.
--->
-
 <gamestages>
-  <config
-		startingWeight ="1"
-		scavengerGameDifficultyBonus="0"
-		adventurerGameDifficultyBonus="0.1"
-		nomadGameDifficultyBonus="0.2"
-		warriorGameDifficultyBonus="0.6"
-		survivalistGameDifficultyBonus="1.0"
-		insaneGameDifficultyBonus="1.5"
-		daysAliveDifficultyBonus="0.1"
-		daysAliveChangeWhenKilled ="2"
-		diminishingReturns ="0.2"
-	/>
-
-  <spawner name="WanderingHorde">
-    <!-- These will wrap around at 50. -->
-    <!-- Will probably have to undo that later. Rev 19924 /19944 -->
-    <gamestage stage="01">
-      <spawn group="scoutHordeStageGS1"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="02">
-      <spawn group="scoutHordeStageGS2"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="03">
-      <spawn group="scoutHordeStageGS5"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="04">
-      <spawn group="ZombieDogGroup"		num="05" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="05">
-      <spawn group="feralHordeStageGS1"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="06">
-      <spawn group="feralHordeStageGS2"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="07">
-      <spawn group="feralHordeStageGS4"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="08">
-      <spawn group="VultureGroup"			num="05" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="09">
-      <spawn group="scoutHordeStageGS8"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="10">
-      <spawn group="scoutHordeStageGS11"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="11">
-      <spawn group="scoutHordeStageGS14"	num="13" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="12">
-      <spawn group="WolfGroup"			num="04" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="13">
-      <spawn group="feralHordeStageGS7"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="14">
-      <spawn group="feralHordeStageGS10"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="15">
-      <spawn group="ZombieBikerBarGroup"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="16">
-      <spawn group="feralHordeStageGS13"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="17">
-      <spawn group="scoutHordeStageGS18"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="18">
-      <spawn group="scoutHordeStageGS22"	num="18" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="19">
-      <spawn group="scoutHordeStageGS27"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="20">
-      <spawn group="ZombieDogGroup"		num="08" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="21">
-      <spawn group="feralHordeStageGS16"	num="18" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="22">
-      <spawn group="feralHordeStageGS19"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="23">
-      <spawn group="feralHordeStageGS23"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="24">
-      <spawn group="ZombieGhostTownGroup"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="25">
-      <spawn group="scoutHordeStageGS31"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="26">
-      <spawn group="scoutHordeStageGS36"	num="15" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="27">
-      <spawn group="VultureGroup"			num="09" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="28">
-      <spawn group="scoutHordeStageGS41"	num="18" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="29">
-      <spawn group="feralHordeStageGS27"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="30">
-      <spawn group="feralHordeStageGS31"	num="20" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="31">
-      <spawn group="feralHordeStageGS35"	num="18" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="32">
-      <spawn group="scoutHordeStageGS46"	num="18" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="33">
-      <spawn group="scoutHordeStageGS52"	num="21" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="34">
-      <spawn group="ZombieDogGroup"		num="12" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="35">
-      <spawn group="scoutHordeStageGS58"	num="19" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="36">
-      <spawn group="scoutHordeStageGS70"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="37">
-      <spawn group="feralHordeStageGS40"	num="19" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="38">
-      <spawn group="ZombieAnimalsGroup"	num="07" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="39">
-      <spawn group="feralHordeStageGS44"	num="21" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="40">
-      <spawn group="feralHordeStageGS49"	num="19" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="41">
-      <spawn group="WolfPack"			num="08" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="42">
-      <spawn group="scoutHordeStageGS64"	num="21" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="43">
-      <spawn group="scoutHordeStageGS76"	num="17" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="44">
-      <spawn group="ZombieSoldierGroup"	num="21" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="45">
-      <spawn group="scoutHordeStageGS82"	num="20" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="46">
-      <spawn group="feralHordeStageGS54"	num="24" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="47">
-      <spawn group="VultureGroup"			num="10" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="48">
-      <spawn group="feralHordeStageGS59"	num="20" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="49">
-      <spawn group="feralHordeStageGS64"	num="16" maxAlive="30" duration="09"/>
-    </gamestage>
-    <gamestage stage="50">
-      <spawn group="ZombieBearsGroup"		num="04" maxAlive="30" duration="09"/>
-    </gamestage>
-  </spawner>
-
-  <!-- <group name="S_Default_XS" emptyChance="0.5" decoyChance="0.2" decoy1hpChance="0.5">
-
-	1. emptyChance:	the chance of the entire sleeper VOLUME having no zombies
-	2. count:			after emptyChance has been checked, the total number of SLEEPERS spawned is determined by the count
-	3. decoyChance:	determines how many OF the spawned sleepers will be DECOYS
-	4. decoy1hpChance:	determines how many OF the spawned decoys will be ONE HIT POINT DECOYS
-
-	Full hit point decoys:	Will never wake up due to sight/sound events. Will wake up if attacked.
-	1 HP decoys:			Will never wake up due to sight/sound events. Will die instantly if attacked.
-
-	The gamestage for a specific sleeper volume can be adjusted up/down in the volume settings, not here.
-	-->
+  <config startingWeight="1" scavengerGameDifficultyBonus="0" adventurerGameDifficultyBonus="0.1" nomadGameDifficultyBonus="0.2" warriorGameDifficultyBonus="0.6" survivalistGameDifficultyBonus="1.0" insaneGameDifficultyBonus="1.5" daysAliveDifficultyBonus="0.1" daysAliveChangeWhenKilled="2" diminishingReturns="0.2"/>
 
   <difficultyModifier name="easy" amount="150"/>
   <difficultyModifier name="medium" amount="300"/>
   <difficultyModifier name="hard" amount="500"/>
 
-  <!-- Lootroom: ExtraSmall 1-2, Small 3-4, Medium 5-7, Large 6-9, ExtraLarge 8-11 -->
   <group name="S_LootRoom_XS" emptyChance="0">
     <spawner name="SleeperGSList" count="1,2"/>
   </group>
@@ -284,7 +22,6 @@ There is a console command: forcegamestage
     <spawner name="SleeperGSList" count="8,11"/>
   </group>
 
-  <!-- Default: ExtraSmall 1-2, Small 2-4, Medium 3-7, Large 4-9, ExtraLarge 5-11 -->
   <group name="S_Default_XS" emptyChance="0.25" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- XS -->
     <spawner name="SleeperGSList" count="1,2"/>
@@ -309,7 +46,6 @@ There is a console command: forcegamestage
   <group name="S_AbandonedHouse_1" emptyChance=".35" decoyChance="0.89" decoy1hpChance="0.80">
     <spawner name="SleeperGSList" count="1,1"/>
   </group>
-
   <group name="S_ZombieDogs_S" emptyChance="0.20" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- S -->
     <spawner name="ZombieDogHorde" count="2,4"/>
@@ -322,27 +58,22 @@ There is a console command: forcegamestage
     <!-- L -->
     <spawner name="ZombieDogHorde" count="4,9"/>
   </group>
-
   <group name="S_SnowZombies_Med" emptyChance="0.1" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- M -->
     <spawner name="SnowZombieHorde" count="3,7"/>
   </group>
-
   <group name="S_FeralZombies_S" emptyChance="0.20" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- S -->
     <spawner name="FeralZombieHorde" count="2,4"/>
   </group>
-
   <group name="S_BikerBar_Med" emptyChance="0.1" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- M -->
     <spawner name="ZombieBikerBarHorde" count="3,7"/>
   </group>
-
   <group name="S_BikerBar_L" emptyChance="0.1" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- L -->
     <spawner name="ZombieBikerBarHorde" count="4,9"/>
   </group>
-
   <group name="S_FootballStadium_Med" emptyChance="0.1" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- M -->
     <spawner name="ZombieFootballStadiumHorde" count="3,7"/>
@@ -351,7 +82,6 @@ There is a console command: forcegamestage
     <!-- L -->
     <spawner name="ZombieFootballStadiumHorde" count="4,9"/>
   </group>
-
   <group name="S_GhostTown_S" emptyChance="0.20" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- S -->
     <spawner name="ZombieGhostTownHorde" count="2,4"/>
@@ -360,7 +90,6 @@ There is a console command: forcegamestage
     <!-- M -->
     <spawner name="ZombieGhostTownHorde" count="3,7"/>
   </group>
-
   <group name="S_ZomSoldier_S" emptyChance="0.20" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- S -->
     <spawner name="ZombieSoldierHorde" count="2,4"/>
@@ -373,7 +102,6 @@ There is a console command: forcegamestage
     <!-- L -->
     <spawner name="ZombieSoldierHorde" count="4,9"/>
   </group>
-
   <group name="S_ZomUtilityWorker_S" emptyChance="0.20" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- S -->
     <spawner name="ZombieUtilityWorkerHorde" count="2,4"/>
@@ -386,7 +114,6 @@ There is a console command: forcegamestage
     <!-- L -->
     <spawner name="ZombieUtilityWorkerHorde" count="4,9"/>
   </group>
-
   <group name="S_BusinessMan_XS" emptyChance="0.25" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- XS -->
     <spawner name="ZombieBusinessManHorde" count="1,2"/>
@@ -403,7 +130,6 @@ There is a console command: forcegamestage
     <!-- L -->
     <spawner name="ZombieBusinessManHorde" count="4,9"/>
   </group>
-
   <group name="S_Badass_XS" emptyChance="0.25" decoyChance="0.2" decoy1hpChance="0.75">
     <!-- XS -->
     <spawner name="ZombieBadassHorde" count="1,2"/>
@@ -424,7 +150,6 @@ There is a console command: forcegamestage
     <!-- XL -->
     <spawner name="ZombieBadassHorde" count="5,11"/>
   </group>
-
   <group name="S_TestChamberDecoy_XS" emptyChance="0.20" decoyChance="1.0" decoy1hpChance="0.2">
     <!-- XS -->
     <spawner name="SleeperTestChamberGSList" count="1,2"/>
@@ -437,8 +162,6 @@ There is a console command: forcegamestage
     <!-- M -->
     <spawner name="SleeperTestChamberGSList" count="3,7"/>
   </group>
-
-
   <spawner name="SleeperTestChamberGSList">
     <gamestage stage="1">
       <spawn group="sleeperHordeStageGS1" num="1" maxAlive="1" duration="1"/>
@@ -452,61 +175,51 @@ There is a console command: forcegamestage
   </spawner>
 
   <!-- spawners -->
-
   <spawner name="FeralZombieHorde">
     <gamestage stage="1">
       <spawn group="ZombiesFeral" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieBikerBarHorde">
     <gamestage stage="1">
       <spawn group="ZombieBikerBarGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieFootballStadiumHorde">
     <gamestage stage="1">
       <spawn group="ZombieFootballStadiumGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieGhostTownHorde">
     <gamestage stage="1">
       <spawn group="ZombieGhostTownGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieSoldierHorde">
     <gamestage stage="1">
       <spawn group="ZombieSoldierGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieUtilityWorkerHorde">
     <gamestage stage="1">
       <spawn group="ZombieUtilityWorkerGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="SnowZombieHorde">
     <gamestage stage="1">
       <spawn group="SnowZombies" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieDogHorde">
     <gamestage stage="1">
       <spawn group="ZombieDogGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieBusinessManHorde">
     <gamestage stage="1">
       <spawn group="ZombieBusinessManGroup" num="1" maxAlive="1" duration="1"/>
     </gamestage>
   </spawner>
-
   <spawner name="ZombieBadassHorde">
     <gamestage stage="1">
       <spawn group="ZombieBadassGroup" num="1" maxAlive="1" duration="1"/>
@@ -514,7 +227,160 @@ There is a console command: forcegamestage
   </spawner>
 
 
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  Bad Company Sleeper Spawns XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <spawner name="WanderingHorde">
+    <gamestage stage="01">
+      <spawn group="scoutHordeStageGS1" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="02">
+      <spawn group="scoutHordeStageGS2" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="03">
+      <spawn group="scoutHordeStageGS5" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="04">
+      <spawn group="ZombieDogGroup" num="05" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="05">
+      <spawn group="feralHordeStageGS1" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="06">
+      <spawn group="feralHordeStageGS2" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="07">
+      <spawn group="feralHordeStageGS4" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="08">
+      <spawn group="VultureGroup" num="05" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="09">
+      <spawn group="scoutHordeStageGS8" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="10">
+      <spawn group="scoutHordeStageGS11" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="11">
+      <spawn group="scoutHordeStageGS14" num="13" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="12">
+      <spawn group="WolfGroup" num="04" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="13">
+      <spawn group="feralHordeStageGS7" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="14">
+      <spawn group="feralHordeStageGS10" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="15">
+      <spawn group="ZombieBikerBarGroup" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="16">
+      <spawn group="feralHordeStageGS13" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="17">
+      <spawn group="scoutHordeStageGS18" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="18">
+      <spawn group="scoutHordeStageGS22" num="18" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="19">
+      <spawn group="scoutHordeStageGS27" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="20">
+      <spawn group="ZombieDogGroup" num="08" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="21">
+      <spawn group="feralHordeStageGS16" num="18" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="22">
+      <spawn group="feralHordeStageGS19" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="23">
+      <spawn group="feralHordeStageGS23" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="24">
+      <spawn group="ZombieGhostTownGroup" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="25">
+      <spawn group="scoutHordeStageGS31" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="26">
+      <spawn group="scoutHordeStageGS36" num="15" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="27">
+      <spawn group="VultureGroup" num="09" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="28">
+      <spawn group="scoutHordeStageGS41" num="18" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="29">
+      <spawn group="feralHordeStageGS27" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="30">
+      <spawn group="feralHordeStageGS31" num="20" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="31">
+      <spawn group="feralHordeStageGS35" num="18" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="32">
+      <spawn group="scoutHordeStageGS46" num="18" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="33">
+      <spawn group="scoutHordeStageGS52" num="21" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="34">
+      <spawn group="ZombieDogGroup" num="12" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="35">
+      <spawn group="scoutHordeStageGS58" num="19" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="36">
+      <spawn group="scoutHordeStageGS70" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="37">
+      <spawn group="feralHordeStageGS40" num="19" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="38">
+      <spawn group="ZombieAnimalsGroup" num="07" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="39">
+      <spawn group="feralHordeStageGS44" num="21" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="40">
+      <spawn group="feralHordeStageGS49" num="19" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="41">
+      <spawn group="WolfPack" num="08" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="42">
+      <spawn group="scoutHordeStageGS64" num="21" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="43">
+      <spawn group="scoutHordeStageGS76" num="17" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="44">
+      <spawn group="ZombieSoldierGroup" num="21" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="45">
+      <spawn group="scoutHordeStageGS82" num="20" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="46">
+      <spawn group="feralHordeStageGS54" num="24" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="47">
+      <spawn group="VultureGroup" num="10" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="48">
+      <spawn group="feralHordeStageGS59" num="20" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="49">
+      <spawn group="feralHordeStageGS64" num="16" maxAlive="30" duration="09"/>
+    </gamestage>
+    <gamestage stage="50">
+      <spawn group="ZombieBearsGroup" num="04" maxAlive="30" duration="09"/>
+    </gamestage>
+  </spawner>
+
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX Bad Company Sleeper Spawns XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
   <spawner name="SleeperGSList">
     <gamestage stage="1">
       <spawn group="ZombiesTierGroup01" num="5" maxAlive="1" duration="1"/>
@@ -1240,10 +1106,9 @@ There is a console command: forcegamestage
       <spawn group="ZombiesTierGroup07" num="97" maxAlive="256" duration="1"/>
     </gamestage>
   </spawner>
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  Bad COmpany Sleeper Spawns  XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX Bad COmpany Sleeper Spawns XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
 
-
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  start: auto generated screamer / scout horde gamestages  XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX start: auto generated screamer / scout horde gamestages XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
   <spawner name="ScoutGSList">
     <gamestage stage="1">
       <spawn group="scoutHordeStageGS1" num="1" maxAlive="2" duration="1"/>
@@ -2212,9 +2077,9 @@ There is a console command: forcegamestage
       <spawn group="scoutHordeStageGS5778" num="85" maxAlive="256" duration="1"/>
     </gamestage>
   </spawner>
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  end: auto generated screamer / scout horde gamestages  XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX end: auto generated screamer / scout horde gamestages XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
 
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  start: auto generated feral horde gamestages  XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX start: auto generated feral horde gamestages XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
   <spawner name="BloodMoonHorde">
     <gamestage stage="1">
       <spawn group="feralHordeStageGS1" num="1" maxAlive="2" duration="1"/>
@@ -4137,6 +4002,6 @@ There is a console command: forcegamestage
       <spawn group="ZombiesNight" num="600" maxAlive="3"/>
     </gamestage>
   </spawner>
-  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX  end: auto generated feral horde gamestages  XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+  <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXX end: auto generated feral horde gamestages XXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
 
 </gamestages>
